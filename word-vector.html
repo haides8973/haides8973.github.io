@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Document Settings -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Base Meta -->
+    <!-- dynamically fixing the title for tag/author pages -->
+
+
+
+    <title>Word Vector</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Styles'n'Scripts -->
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.edited.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/built/syntax.css" />
+    <!-- Noto Sans font -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+    <style>.hljs { background: none; }</style>
+    <!-- Mathjax support -->
+    
+        <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    TeX: {
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    },
+    tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$'] ],
+    processEscapes: true,
+  }
+});
+MathJax.Hub.Register.MessageHook("Math Processing Error",function (message) {
+	  alert("Math Processing Error: "+message[1]);
+	});
+MathJax.Hub.Register.MessageHook("TeX Jax - parse error",function (message) {
+	  alert("Math Processing Error: "+message[1]);
+	});
+</script>
+<script type="text/javascript" async
+        src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+    
+    <!--[if IE]>
+        <style>
+            p, ol, ul{
+                width: 100%;
+            }
+            blockquote{
+                width: 100%;
+            }
+        </style>
+    <![endif]-->
+    
+    <!-- This tag outputs SEO meta+structured data and other important settings -->
+    <meta name="description" content="Personal Blog" />
+    <link rel="shortcut icon" href="https://haides8973.github.io/assets/images/favicon.png" type="image/png" />
+    <link rel="canonical" href="https://haides8973.github.io/word-vector" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+     <!--title below is coming from _includes/dynamic_title-->
+    <meta property="og:site_name" content="Sangjoon Lee's Playground" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Word Vector" />
+    <meta property="og:description" content="숫자로 언어를 표현하기 숫자로 표현하지 못하는 정보는 컴퓨터에게 아무런 의미가 없다. 그렇다면 인간의 언어를 어떻게 숫자로 나타내야 할까? WordNet 영어의 어휘들을 의미에 따라 관계도로 나타낸 데이터베이스 ‘sysnet’ 이라는 동의어 집합에 단어들을 저장 상위어, 하위어, 양태어, 함의 등의 다양한 관계가 예시와 함께 저장되어 있음 특정 문맥에서 동의어가 될 수 있는, 혹은" />
+    <meta property="og:url" content="https://haides8973.github.io/word-vector" />
+    <meta property="og:image" content="https://haides8973.github.io/assets/images/grapes.jpg" />
+    <meta property="article:publisher" content="https://www.facebook.com/" />
+    <meta property="article:author" content="https://www.facebook.com/" />
+    <meta property="article:published_time" content="2022-08-26T03:33:54+09:00" />
+    <meta property="article:modified_time" content="2022-08-26T03:33:54+09:00" />
+    <meta property="article:tag" content="Nlp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Word Vector" />
+    <meta name="twitter:description" content="숫자로 언어를 표현하기 숫자로 표현하지 못하는 정보는 컴퓨터에게 아무런 의미가 없다. 그렇다면 인간의 언어를 어떻게 숫자로 나타내야 할까? WordNet 영어의 어휘들을 의미에 따라 관계도로 나타낸 데이터베이스 ‘sysnet’ 이라는 동의어 집합에 단어들을 저장 상위어, 하위어, 양태어, 함의 등의 다양한 관계가 예시와 함께 저장되어 있음 특정 문맥에서 동의어가 될 수 있는, 혹은" />
+    <meta name="twitter:url" content="https://haides8973.github.io/" />
+    <meta name="twitter:image" content="https://haides8973.github.io/assets/images/grapes.jpg" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Sangjoon Lee's Playground" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="Nlp" />
+    <meta name="twitter:site" content="@" />
+    <meta name="twitter:creator" content="@" />
+    <meta property="og:image:width" content="1400" />
+    <meta property="og:image:height" content="933" />
+
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Website",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Sangjoon Lee's Playground",
+        "logo": "https://haides8973.github.io/assets/images/blog-icon.png"
+    },
+    "url": "https://haides8973.github.io/word-vector",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://haides8973.github.io/assets/images/grapes.jpg",
+        "width": 2000,
+        "height": 666
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://haides8973.github.io/word-vector"
+    },
+    "description": "숫자로 언어를 표현하기 숫자로 표현하지 못하는 정보는 컴퓨터에게 아무런 의미가 없다. 그렇다면 인간의 언어를 어떻게 숫자로 나타내야 할까? WordNet 영어의 어휘들을 의미에 따라 관계도로 나타낸 데이터베이스 ‘sysnet’ 이라는 동의어 집합에 단어들을 저장 상위어, 하위어, 양태어, 함의 등의 다양한 관계가 예시와 함께 저장되어 있음 특정 문맥에서 동의어가 될 수 있는, 혹은"
+}
+    </script>
+
+    <!-- <script type="text/javascript" src="https://demo.ghost.io/public/ghost-sdk.min.js?v=724281a32e"></script>
+    <script type="text/javascript">
+    ghost.init({
+    	clientId: "ghost-frontend",
+    	clientSecret: "f84a07a72b17"
+    });
+    </script> -->
+
+    <meta name="generator" content="Jekyll 3.6.2" />
+    <link rel="alternate" type="application/rss+xml" title="Word Vector" href="/feed.xml" />
+
+
+
+
+</head>
+<body class="post-template">
+
+    <div class="site-wrapper">
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- default -->
+
+<!-- The tag above means: insert everything in this file
+into the {body} of the default.hbs template -->
+
+<header class="site-header outer">
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+        
+            
+                <a class="site-nav-logo" href="https://haides8973.github.io/"><img src="/assets/images/blog-icon.png" alt="Sangjoon Lee's Playground" /></a>
+            
+        
+        
+            <ul class="nav" role="menu">
+    <li class="nav-home" role="menuitem"><a href="/">Home</a></li>
+    <li class="nav-about" role="menuitem"><a href="/about/">About</a></li>
+    <li class="nav-ml" role="menuitem"><a href="/tag/ml/">ML</a></li>
+    <li class="nav-cv" role="menuitem"><a href="/tag/cv/">CV</a></li>
+    <li class="nav-nlp" role="menuitem"><a href="/tag/nlp/">NLP</a></li>
+    <li class="nav-others" role="menuitem"><a href="/tag/others/">Others</a></li>
+</ul>
+
+        
+    </div>
+
+    <!-- ADD SEARCH BUTTON
+
+    <div class="site-nav-right">
+        <div class="social-links">
+            
+            
+        </div>
+
+        <header id="header-2" class="header">
+            <nav class="header-nav">
+                <div class="search-button">
+                    <a href="#" class="search-toggle" data-selector="#header-2"></a>
+                </div>
+                <form action="" class="search-box">
+                    <input type="text" class="text search-input" placeholder="Search..." />
+                </form>
+            </nav>
+        </header>
+
+    </div>
+    -->
+</nav>
+
+    </div>
+</header>
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<main id="site-main" class="site-main outer" role="main">
+    <div class="inner">
+
+        <article class="post-full  tag-nlp post ">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime="26 August 2022">26 August 2022</time>
+                    
+                        <span class="date-divider">/</span>
+                        
+                            
+                               <a href='/tag/nlp/'>NLP</a>
+                            
+                        
+                    
+                </section>
+                <h1 class="post-full-title">Word Vector</h1>
+            </header>
+
+            
+            <figure class="post-full-image" style="background-image: url(/assets/images/grapes.jpg)">
+            </figure>
+            
+
+            <section class="post-full-content">
+                <div class="kg-card-markdown">
+                    <h1 id="숫자로-언어를-표현하기">숫자로 언어를 표현하기</h1>
+
+<p><span style="font-size:80%">
+숫자로 표현하지 못하는 정보는 컴퓨터에게 아무런 의미가 없다.
+그렇다면 인간의 언어를 어떻게 숫자로 나타내야 할까?
+</span></p>
+
+<h2 id="wordnet">WordNet</h2>
+<p><br />
+영어의 어휘들을 의미에 따라 관계도로 나타낸 데이터베이스</p>
+
+<ul>
+  <li>‘sysnet’ 이라는 동의어 집합에 단어들을 저장</li>
+  <li>상위어, 하위어, 양태어, 함의 등의 다양한 관계가 예시와 함께 저장되어 있음</li>
+  <li><span style="color:#FF3300"> 특정 문맥에서 동의어가 될 수 있는, 혹은 그럴 수 없는 단어들을 고려하지 못함 </span></li>
+  <li><span style="color:#FF3300"> 신조어가 나올 때마다 일일이 작업을 해야 함 </span></li>
+  <li><span style="color:#FF3300"> 단어 간의 미묘한 차이를 구별할 수 없음 (뉘앙스) </span></li>
+</ul>
+
+<p>사용 예시
+<img src="../assets/images/hypernym.png" alt="alt text" /></p>
+
+<center>
+<span style="font-size:80%">
+
+단어들 간의 관계만 보여줄 뿐, 어느 정도로 가까운지는 알려주지 않는다.
+</span>
+</center>
+
+<p><br /></p>
+
+<h2 id="단어의-벡터화">단어의 벡터화</h2>
+
+<p><br />
+자연어를 컴퓨터가 이해할 수 있는 숫자로 임베딩
+<em>(Embedding)</em>
+하는 가장 쉬운 방법은 one-hot vector의 채용이다. 
+One-hot vector는 표현하고자 하는 단어의 인덱스의 값만 1이고,
+나머지는 전부 0으로 표현되는 vector를 뜻한다.<br />
+‘I used to love eating spicy noodle.’ 이라는 문장을 예시로 들어보자.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">단어</th>
+      <th style="text-align: center">인덱스</th>
+      <th style="text-align: center">벡터</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">I</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">[1,0,0,0,0,0,0,0]</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">used</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">[0,1,0,0,0,0,0,0]</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">to</td>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">[0,0,1,0,0,0,0,0]</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">love</td>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">[0,0,0,1,0,0,0,0]</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">eating</td>
+      <td style="text-align: center">4</td>
+      <td style="text-align: center">[0,0,0,0,1,0,0,0]</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">spicy</td>
+      <td style="text-align: center">5</td>
+      <td style="text-align: center">[0,0,0,0,0,1,0,0]</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">noodle</td>
+      <td style="text-align: center">6</td>
+      <td style="text-align: center">[0,0,0,0,0,0,1,0]</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br />
+아주 간단한 문장임에도 불구하고 $7 \times 7$의 Sparse Vector가 생성된다.</p>
+
+<p>따라서 위와 같은 매우 비효율적인 방식에서 벗어나,
+차원의 수를 줄여서 Dense Vector로 단어들을 나타내려는 시도가 여럿 있었다. 그 중 대표격이 바로 
+<strong>Word2Vec</strong>이다.
+<br /></p>
+
+<h2 id="word2vec">Word2Vec</h2>
+<p><br />
+핵심 아이디어</p>
+<ul>
+  <li>
+    <p>어떤 문장 내의 중심 단어 $t$와, 그 주변에 있는 단어들 간의 관계를 기록하여, <u>주변 단어가 주어졌을 때 모든 단어에 대해 각각이 중심 단어가 될 수 있는 확률을 계산한다.</u>
+(이 학습 방식을 CBOW 라고 하며, 그 역은 Skip Gram이라고 한다)</p>
+  </li>
+  <li>
+    <p>주변 단어의 범위는 미리 정해둔 window size s에 따라 다르다.</p>
+  </li>
+</ul>
+
+<h3 id="word2vec의-training-프로세스">Word2Vec의 Training 프로세스</h3>
+<p><span style="font-size:80%">
+<a href="https://ronxin.github.io/wevi/" target="_blank">
+해당 사이트</a>가 word2vec의 학습을 이해하는 데 시각적으로 도움이 될 수 있다.
+</span></p>
+
+<h5 id="이론적인-설명">이론적인 설명</h5>
+
+<p>CBOW보다는 Skip Gram이 더 선호되므로 해당 방식만 설명한다.</p>
+
+<p>단어 인덱스 $t (1, 2, …, T)$에 대해, 중심 단어 $w_t$ 가 주어졌을 때 주변 단어 $w_{t+j}$가 등장할 통계적 확률을 계산한다.
+그 확률이 최대가 되도록 하는 $\theta$를 찾는다. (window size $= s$)<br />
+이를 수식으로 나타내면 다음과 같다.</p>
+
+<p>$
+\begin{aligned}
+L(\theta) = \prod_{t=1}^{T} \prod_{-s\leq j \leq s (j\neq 0)} P(w_{t+j}|w_t;\theta) (j \neq 0)
+\end{aligned}
+$</p>
+
+<p>자연스럽게 Loss function은 위 확률함수의 negative log likelihood가 된다. 따라서</p>
+
+<p>$
+\begin{aligned}
+J(\theta) = -\frac{1}{T} \text{log}(L(\theta)) = -\frac{1}{T} \sum_{t=1}^{T} \sum_{-s\leq j \leq s (j \neq 0)} \text{log}(P(w_{t+j}|w_t;\theta)) 
+\end{aligned}
+$</p>
+
+<p>가 최소가 되는 $\theta$를 gradient descent로 찾아내면 되지만,<br />
+아직 $P(w_{t+j}|w_t;\theta)$를 정의하지 않았다. 여기서 Word2Vec은 $\theta$에 포함되는 두 개의 벡터 $u$와 $v$를 도입한다.</p>
+
+<ul>
+  <li>$v_w$는 $w$가 중심 단어일 경우에 사용하는 벡터. one-hot vector를 N차원으로 Embedding 해주는 역할을 한다. 따라서 $v$는 $V \times N$의 크기를 갖는다.</li>
+  <li>$u_w$는 $v$의 정 반대 역할이다. N차원으로 Embedding 된 벡터를 다시 V차원으로 변경하여 모든 단어에 대해 $w$를 주변 단어로 삼을 수 있는 확률을 구해준다. 따라서 $u$는 $N \times V$의 크기를 갖는다.
+<span style="font-size:80%">
+이때 $u$에서 유의할 점은 $w$를 주변단어로 삼을 수 있는 모든 단어를 유추해야 하기 때문에, 추론 결과가 하나에 국한되지 않는다. 
+</span></li>
+</ul>
+
+<p>그러면 $ 
+P(w_{t+j}|w_t;\theta)
+$를 다음과 같이 softmax function으로 나타낼 수 있다.  (여기서 $o$가 주변 단어 $w_{t+j}$이고, $c$는 중심 단어 $w_t$이다. $V$는 전체 단어 집합을 의미한다.)</p>
+
+<p>$
+\begin{aligned}
+P(\text{o | c} ; \theta) = \frac{\text{exp}(u_o^{\top} v_c)}{\sum_{w \in V} \text{exp}(u_w^{\top} v_c)}
+\end{aligned}
+$</p>
+
+<p>$c$가 $o$와의 동시 출현 빈도가 높다면, $\text{exp}(u_o^{\top} v_c)$ 의 값이 더 클 것이다. $u_o$는 $o$가 주변 단어로서 등장한 빈도가 높은 중심 단어를 찾는 데 사용되기 때문이다.</p>
+
+<details>
+  <summary>Calculating Gradient Descent of SkipGram</summary>
+
+  <p><img src="../assets/images/skipgramsg.png" alt="alt text" /></p>
+
+</details>
+<p><br /></p>
+
+<h4 id="negative-sampling">Negative Sampling</h4>
+<p><br />
+그런데 전체 단어 목록인 $V$의 크기가 매우 큰 반면, 실제로 학습 시 (stochastic) gradient descent에 의해 갱신되는 $u$와 $v$는 극히 일부분이다.
+따라서 실제로 중심 단어 $c$와 연관성이 있는 부분만 update 한다면, 학습 효율이 매우 상승하리라 기대할 수 있다. 이를
+<span style="color:#b05230">
+Negative Sampling
+</span>
+이라고 한다.
+<br />
+간단한 예시를 들어보자면, 이전까지는 I와 money라는 주변 단어가 주어졌을 때, ‘중심 단어가 무엇일까?’ 라는 다중 분류 문제로 접근하고 있었다. 
+그러나 I와 money 의 중심 단어로 ‘love가 들어갈 수 있는가?’ 라는 이중 분류 문제로 환원될 수 있다면, 
+즉 통계상으로 터무니없는 단어인 ‘quirk’ 와 같은 단어를 원천적으로 차단할 수 있다면 훨씬 효율적인 학습과 예측을 할 수 있다는 뜻이다.</p>
+
+<p>하나의 중심 단어에 대해서 전체 단어 집합보다 훨씬 작은 단어 (대략 2~5개) 집합을 만들어놓고 주변 단어들을 positive,
+랜덤으로 샘플링 된 단어들을 negative으로 labeling 해두면 negative sampling을 위한 데이터셋이 완성된다.
+이때 어떤 단어 $w_i$가 negative sample로 뽑힐 확률은 
+$
+P(w_i) = \frac{f(w_i) ^{3/4}}{\sum_{j=1}f(w_j) ^{3/4}} 
+$이다.
+$f(w_i)$는 $w_i$가 training set에 등장한 비율(해당 단어 빈도/전체 단어수)을 뜻한다. 
+또한 
+$
+\frac{3}{4}
+$ 제곱을 해주는 이유는 빈도가 매우 낮은 단어의 값을 약간이나마 높여주어 그것들을 샘플링에서 아예 배제하지는 않을 거라는 의미이다.</p>
+
+<p>Negative sampling을 적용한 loss function은 다음과 같다.
+$
+\begin{align}
+J(\theta) = -\frac{1}{\text{T}} \sum_{t=1}^{T} 
+[\sum_{w \in \text{context}(w_t)} \text{log}P(w \in \text{context}(w_t)|w_t, \theta) \\<br />
++
+\sum_{w \notin \text{context}(w_t)} \text{log}P(w \notin \text{context}(w_t)|w_t, \theta)] 
+\end{align}
+$
+<br />
+이는 positive samples - 정답인 경우, (1)에 대한 loss와 
+negative samples - 오답인 경우, (2)에 대한 loss를 동시에 고려하겠다는 의미이다.</p>
+
+<h4 id="subsampling">Subsampling</h4>
+<p><br />
+반면 너무 빈번하게 갱신되는 벡터를 갱신하지 않는 방식도 고려해 볼 수 있다.
+이 기법 역시 학습 비용을 줄이기 위한 방법이다.<br />
+어떤 단어 $w_i$를 학습에서 제외시키는 비율은
+$
+P(w_i) = \text{1} - \sqrt{\frac{t}{f(w_i)}}
+$
+이다. 이때 $t$는 hyperparameter로 입맛에 맞게 지정해주면 된다. 일반적으로는 $10^{-5}$로 설정한다.</p>
+
+<h2 id="co-occurence-count">Co-occurence count</h2>
+<p><br />
+그런 word2vec에도 단점이 있는데, word embedding이 window 내에서만 이루어지기 때문에 전체 corpus의 통계 정보를 반영하지 못한다는 점이다.
+두 단어가 지속적으로 한 문장 안에 등장한다고 해도, 둘 사이의 거리가 멀면 서로 연관성이 없는 단어가 된다. 
+그래서 좀더 직관적으로 단어의 동시 등장 횟수를 일일이 세는 방식이 보완책으로 도입되었다. 이를 <em>Co-occurence matrix</em> 라고 한다.</p>
+
+<p>다음은 세 문장 ‘I like deep learning.’, ‘I like NLP.’ 그리고 ‘I enjoy flying.’ 세 문장을 co-occurence matrix로 표현한 것이다. window size는 1이다. (보통 5에서 10이 적당하다)</p>
+
+<p><img src="../assets/images/cooccur.png" alt="alt text" /></p>
+
+<p>선형대수를 어느정도 공부했다면 이러한 sparse matrix의 차수를 낮추는 방식이 떠오를 것이다. 
+<em>Singular Value Decomposition</em>을 통해 이 행렬을 분해하면 word embedding vector를 얻을 수 있다. 
+co-occurence matrix는 symmetric square matrix이므로 n=d임에 유의하자.</p>
+
+<p><img src="../assets/images/svd.png" alt="alt text" /></p>
+
+<p>이렇게 분해된 행렬에 대해 상위 t개 - embedding vector의 차수 만큼의 특이값만 추출하여 사용한다. (Truncated SVD)
+그러면 $U$는 $n \times t$의 $U’$가, $S$는 $t \times t$의 $S’$가, $V^{\top}$는 $t \times n$의 $V’^{\top}$가 된다.
+마지막으로 이렇게 변형된 행렬곱에 $V’$를 곱해주면 우리가 원하는 word embedding이 된다.</p>
+
+<p>Word embedding vector = 
+$U’ S’ V’^{\top} V’$</p>
+
+<hr />
+
+<h2 id="glove">GloVe</h2>
+<p><br />
+앞서 Word2Vec은 통계적인 방식을 사용하는 co-occurence count 방식에 비해 단어 간 비교적 복잡한 상관성을 포착하는 데 더 특화되어 있다고 했다.
+하지만 통계를 직접적으로 활용하지 못하기 때문에 학습 비용에 있어 압도적인 열세를 보였다. 그래서 이 둘을 합친 <strong>GloVe</strong>가 세상에 나오게 된다.
+GloVe는 Co-occurence를 단순히 세는 것에서 그치지 않고, 그 확률에 집중한다.</p>
+
+<p>‘나무’라는 단어는 ‘밀림’와 등장할 확률이 높을까, 아니면 ‘형이상학’과 등장할 확률이 높을까? ‘제무제표’는 어떨까? 
+아마 밀림 &gt; 형이상학 ≈ 제무제표 정도의 순서라고 추측해 볼 수 있다. 확실히 ‘나무’라는 단어는 ‘형이상학’이나 ‘제무제표’ 보다는 ‘밀림’과 더 관계가 있을 테니까.
+이 확률 상의 차이를 어떻게 벡터 공간에 나타낼 수 있을까?</p>
+
+<h5 id="이론적인-설명-1">이론적인 설명</h5>
+
+<p>가장 추상적인 정의는 다음과 같다.
+$F$를 아직 엄밀하게 정의하지는 못하지만, $w_i, w_j, \bar{w}_k$를 넣으면 동시 등장 확률의 비율이 되도록 정의하겠다는 뜻이다.</p>
+
+<p>$
+F(w_i, w_j, \bar{w}_k) = \frac{P(i|k)}{P(j|k)}
+$</p>
+
+<p>우선, 단어 $w_i$와 $w_j$를 embedding 공간에서 비교할 때, 그 연산이 linear하도록 정의한다. 
+이는 이전 word embedding들이 모두 그러한 특성을 가지고 있었기 때문이다.</p>
+
+<p><img src="../assets/images/glove_embed.png" alt="alt text" />
+이 예시는 Word2Vec에서 국가와 그 수도가 어떤 선형관계를 보여주는지 2차원으로 나타낸 결과이다. 
+GloVe 역시 이것을 따라가고자 했다.
+따라서 좌변을 다음과 같이 바꿀 수 있다.</p>
+
+<p>$
+F(w_i - w_j, \bar{w}_k) = \frac{P(i|k)}{P(j|k)}
+$</p>
+
+<p>이때 좌변은 벡터값이고 우변은 스칼라값이다. 따라서 이 차이를 메꾸기 위해 두 벡터를 내적해준다. 식을 수정하면</p>
+
+<p>$
+F((w_i-w_j)^{\top} \bar{w}_k) = F(w_i^{\top} \bar{w}_k - w_j^{\top} \bar{w}_k)= \frac{P(i|k)}{P(j|k)}
+$</p>
+
+<p>$w_i$와 $w_j$를 바꿔쳐도 성립할 수 있도록 해야 한다. 두 단어를 무작위로 고르기 때문이다.</p>
+
+<p>$
+F(w_j - w_i, \bar{w}_k) = \frac{P(j|k)}{P(i|k)}
+$</p>
+
+<p>즉 벡터 간 뺄셈이 곧 확률의 나눗셈으로 변하는데, 이 조건을 만족하는 가장 대표적인 함수는 지수함수이다.</p>
+
+<p>$
+\text{exp}((w_i-w_j)^{\top} \bar{w}_k) = \text{exp}(w_i^{\top} \bar{w}_k - w_j^{\top} \bar{w}_k) 
+= \frac{\text{exp}(w_i^{\top} \bar{w}_k)}{\text{exp}(w_j^{\top} \bar{w}_k)} = \frac{P(i|k)}{P(j|k)}
+$</p>
+
+<p>정리하면 
+$
+w_i^{\top} \bar{w}_ k = \text{log}P(i|k)
+= \text{log} \frac{A_{ik}}{\sum_{j} A_{ij}} = \text{log}A_{ik} - \text{log}\sum_{j} A_{ij}
+$
+이다.</p>
+
+<p><span style="font-size:70%">
+이때 $A_{ik}$는 단어 i와 k의 동시 등장 횟수이다.
+</span></p>
+
+<p>앞서 $w_i$와 $w_j$는 서로 바꿔쳐도 성립해야 한다고 언급했다. 하지만 이는 $w_i$와 $\bar{w}_ k$ 에도 동일하게 적용되어야 한다. 
+위의 식을 자세히 살펴보면 i와 k를 바꿔치기에는 하나 걸림돌이 있는데, 바로 $\text{log}\sum_{j} A_{ij}$ 항이다. i와 k를 바꿔치면 이 항은 
+$\text{log}\sum_{j} A_{kj}$ 로 바뀌고 둘은 명확하게 다른 값이기 때문이다. 따라서 그 두 값은 bias로 간주한다.</p>
+
+<p>그러면 최종 결과는</p>
+
+<p>$
+\text{log}A_{ik} = w_i^{\top} \bar{w}_ k + \text{log}\sum_{j} A_{ij} = w_i^{\top} \bar{w}_ k + b_i + b_w
+$</p>
+
+<p>가 되고, 최종 손실함수는</p>
+
+<p>$
+L = \sum_{i,j=1}^{V} f(A_{ij}) [w_i^{\top} \bar{w}_ j + b_i + b_j - \text{log}(A_{ij}+1)]^2
+$</p>
+
+<p>$f$가 어디서 나온 함수인가 싶을 텐데, A가 sparse matrix일 확률이 매우 크다는 점에서 착안한 가중치 함수이다.
+너무나도 낮은 빈도로 등장한 단어 쌍은 학습할 필요가 거의 없기 때문에 일정 횟수 미만의 단어쌍은 낮은 가중치를 주는 것이 현명하다. 
+논문에서 설정한 가중치 함수는
+$
+f(x) = \text{min}(1, (x / x_{max})^{3/4})
+$
+이다.</p>
+
+<hr />
+
+<h2 id="evaluation">Evaluation</h2>
+<p><br />
+이렇게 열심히 word vector를 고안해냈는데, 과연 GloVe가 Word2Vec보다 낫다고 말할 수 있는 객관적인 증거는 무엇일까?</p>
+
+<p>word vector를 평가하는 가장 대표적인 방법은 찾고자 하는 관계쌍을 벡터 공간상에서 표현했을 때 얼마나 통일성 있게 단어들이 정렬되어있나를 보는 것이다.</p>
+
+<p><img src="../assets/images/glove_embed.png" alt="alt text" /></p>
+<center><span style="font-size:80%">
+국가-수도의 관계가 벡터 공간상에서 통일성 있게 나타나고 있다. 
+</span></center>
+
+<p>이를 수식화하면 
+$
+d = \underset{i}{\operatorname{arg max}} \frac{(x_a - x_b + x_j)^{\top} x_i}{\parallel x_a - x_b + x_j\parallel}
+$</p>
+
+<p>벡터 $x_i$와 벡터 $x_j$ + (원하는 의미 관계) 간의 코사인 거리를 최대로 하는 단어를 찾는다.
+이렇게 찾은 단어 d와 원래 찾고자 했던 단어의 일치 여부를 확인한다.
+(단, 이 수식은 찾고자 하는 관계가 선형적으로 표현이 가능할 때에만 성립한다.)</p>
+
+<p>그 외에도 parameter의 개수, 임베딩 벡터 공간의 차수, 모델 자체의 용량 등 더 직접적인 평가 지표도 가능하다.
+혹은 Named Entity Recognition 이라는 task를 얼마나 잘 수행하는지 확인하는 방식도 있는데, 
+word vector가 제대로 설계되었다면 위의 국가-수도 관계처럼 ‘고유명사’에 대한 의미를 간접적으로 찾을 수 있기 때문이다.</p>
+
+<hr />
+
+<p>고려대학교 이병준 교수님의 2021년 가을학기 ‘자연어처리’ 강의 자료와 원 논문들을 참고하여 작성했습니다.</p>
+
+<p><a href="https://arxiv.org/abs/1310.4546">Distributed Representations of Words and Phrases and their Compositionality</a> (Mikolov et al., CoRR 2013)</p>
+
+<p><a href="https://aclanthology.org/D14-1162">GloVe: Global Vectors for Word Representation</a> (Pennington et al., EMNLP 2014)</p>
+
+                </div>
+            </section>
+
+            <!-- Email subscribe form at the bottom of the page -->
+            
+
+            <footer class="post-full-footer">
+                <!-- Everything inside the #author tags pulls data from the author -->
+                <!-- #author-->
+                
+                    
+                
+                    
+                        <section class="author-card">
+                            
+                                <img class="author-profile-image" src="/assets/images/hanuibaram.png" alt="haides8973" />
+                            
+                            <section class="author-card-content">
+                                <h4 class="author-card-name"><a href="/author/haides8973">Sangjoon Lee</a></h4>
+                                
+                                    <p>1998</p>
+                                
+                            </section>
+                        </section>
+                        <div class="post-full-footer-right">
+                            <a class="author-card-button" href="/author/haides8973">Read More</a>
+                        </div>
+                    
+                
+                <!-- /author  -->
+            </footer>
+
+            <!-- If you use Disqus comments, just uncomment this block.
+            The only thing you need to change is "test-apkdzgmqhj" - which
+            should be replaced with your own Disqus site-id. -->
+            
+
+        </article>
+
+    </div>
+</main>
+
+<!-- Links to Previous/Next posts -->
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+            
+                
+                
+                
+                
+                    <article class="read-next-card"
+                        
+                            style="background-image: url(/assets/images/blog-cover.jpg)"
+                        
+                    >
+                        <header class="read-next-card-header">
+                            <small class="read-next-card-header-sitetitle">&mdash; Sangjoon Lee's Playground &mdash;</small>
+                            
+                                <h3 class="read-next-card-header-title"><a href="/tag/nlp/">Nlp</a></h3>
+                            
+                        </header>
+                        <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+</div>
+                        <div class="read-next-card-content">
+                            <ul>
+                                
+                                
+                                  
+                                    
+                                        
+                                        
+                                            <li><a href="/dependency-parsing">Dependency Parsing</a></li>
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                  
+                                
+                                  
+                                
+                                  
+                                
+                            </ul>
+                        </div>
+                        <footer class="read-next-card-footer">
+                            <a href="/tag/nlp/">
+                                
+                                    See all 1 posts  →
+                                
+                            </a>
+                        </footer>
+                    </article>
+                
+            
+
+            <!-- If there's a next post, display it using the same markup included from - partials/post-card.hbs -->
+            
+                
+
+    <article class="post-card post-template">
+        
+            <a class="post-card-image-link" href="/dependency-parsing">
+                <div class="post-card-image" style="background-image: url(/assets/images/grapes.jpg)"></div>
+            </a>
+        
+        <div class="post-card-content">
+            <a class="post-card-content-link" href="/dependency-parsing">
+                <header class="post-card-header">
+                    
+                        
+                            
+                                <span class="post-card-tags">Nlp</span>
+                            
+                        
+                    
+
+                    <h2 class="post-card-title">Dependency Parsing</h2>
+                </header>
+                <section class="post-card-excerpt">
+                    
+                        <p>
+</p>
+                    
+                </section>
+            </a>
+            <footer class="post-card-meta">
+                
+                    
+                
+                    
+                        
+                        <img class="author-profile-image" src="/assets/images/hanuibaram.png" alt="Sangjoon Lee" />
+                        
+                        <span class="post-card-author">
+                            <a href="/author/haides8973/">Sangjoon Lee</a>
+                        </span>
+                    
+                
+                <span class="reading-time">
+                    
+                    
+                      1 min read
+                    
+                </span>
+            </footer>
+        </div>
+    </article>
+
+            
+
+            <!-- If there's a previous post, display it using the same markup included from - partials/post-card.hbs -->
+            
+                
+
+    <article class="post-card post-template">
+        
+            <a class="post-card-image-link" href="/advanced-markdown">
+                <div class="post-card-image" style="background-image: url(/assets/images/advanced.jpg)"></div>
+            </a>
+        
+        <div class="post-card-content">
+            <a class="post-card-content-link" href="/advanced-markdown">
+                <header class="post-card-header">
+                    
+                        
+                            
+                                <span class="post-card-tags">Others</span>
+                            
+                        
+                    
+
+                    <h2 class="post-card-title">Advanced Markdown tips</h2>
+                </header>
+                <section class="post-card-excerpt">
+                    
+                        <p>There are lots of powerful things you can do with the Ghost editor If you've gotten pretty comfortable with all the basics of writing in Ghost, then you may enjoy some more advanced</p>
+                    
+                </section>
+            </a>
+            <footer class="post-card-meta">
+                
+                    
+                        
+                        <img class="author-profile-image" src="/assets/images/ghost.png" alt="Ghost" />
+                        
+                        <span class="post-card-author">
+                            <a href="/author/ghost/">Ghost</a>
+                        </span>
+                    
+                
+                    
+                
+                <span class="reading-time">
+                    
+                    
+                      2 min read
+                    
+                </span>
+            </footer>
+        </div>
+    </article>
+
+            
+
+        </div>
+    </div>
+</aside>
+
+<!-- Floating header which appears on-scroll, included from includes/floating-header.hbs -->
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="https://haides8973.github.io/">
+            
+                <img src="/assets/images/favicon.png" alt="Sangjoon Lee's Playground icon" />
+            
+            <span>Sangjoon Lee's Playground</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">Word Vector</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
+</svg>
+</div>
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=Word+Vector&amp;url=https://haides8973.github.ioword-vector"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://haides8973.github.ioword-vector"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+
+        </a>
+    </div>
+    <progress class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+<!-- /post -->
+
+<!-- The #contentFor helper here will send everything inside it up to the matching #block helper found in default.hbs -->
+
+
+        <!-- Previous/next page links - displayed on every page -->
+        
+
+        <!-- The footer at the very bottom of the screen -->
+        <footer class="site-footer outer">
+            <div class="site-footer-content inner">
+                <section class="copyright"><a href="https://haides8973.github.io/">Sangjoon Lee's Playground</a> &copy; 2022</section>
+                <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> &
+                    <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a> using
+                    <a href="https://github.com/jekyllt/jasper2" target="_blank" rel="noopener">Jasper2</a></section>
+                <nav class="site-footer-nav">
+                    <a href="/">Latest Posts</a>
+                    
+                    
+                    <a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- The big email subscribe modal content -->
+    
+
+    <!-- highlight.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.10.0/components/prism-abap.min.js"></script>
+    <script>$(document).ready(function() {
+      $('pre code').each(function(i, block) {
+        hljs.highlightBlock(block);
+      });
+    });</script>
+
+    <!-- jQuery + Fitvids, which makes all video embeds responsive -->
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="https://demo.ghost.io/assets/js/jquery.fitvids.js?v=724281a32e"></script>
+
+
+    <!-- Paginator increased to "infinit" in _config.yml -->
+    <!-- if paginator.posts  -->
+    <!-- <script>
+        var maxPages = parseInt('');
+    </script>
+    <script src="/assets/js/infinitescroll.js"></script> -->
+    <!-- /endif -->
+
+    
+
+
+    <!-- Add Google Analytics  -->
+    <!-- Google Analytics Tracking code -->
+ <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', '', 'auto');
+  ga('send', 'pageview');
+
+ </script>
+
+
+    <!-- The #block helper will pull in data from the #contentFor other template files. In this case, there's some JavaScript which we only want to use in post.hbs, but it needs to be included down here, after jQuery has already loaded. -->
+    
+        <script>
+
+// NOTE: Scroll performance is poor in Safari
+// - this appears to be due to the events firing much more slowly in Safari.
+//   Dropping the scroll event and using only a raf loop results in smoother
+//   scrolling but continuous processing even when not scrolling
+$(document).ready(function () {
+    // Start fitVids
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    // End fitVids
+
+    var progressBar = document.querySelector('progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        // show/hide floating header
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+});
+</script>
+
+    
+
+    <!-- Ghost outputs important scripts and data with this tag - it should always be the very last thing before the closing body tag -->
+    <!-- ghost_foot -->
+
+</body>
+</html>

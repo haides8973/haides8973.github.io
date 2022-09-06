@@ -8,25 +8,30 @@
     
       
       <item>
-        <title>Managing Ghost users</title>
+        <title>Dependency Parsing</title>
         
-          <description>&lt;p&gt;Ghost has a number of different user roles for your team&lt;/p&gt;
-&lt;h3 id=&quot;authors&quot;&gt;Authors&lt;/h3&gt;
-&lt;p&gt;The base user level in Ghost is an author. Authors can write posts, edit their own posts, and publish their own posts. Authors are &lt;strong&gt;trusted&lt;/strong&gt; users. If you don&apos;t trust users to be allowed to publish their own posts, you shouldn&apos;t invite them to Ghost admin.&lt;/p&gt;
-&lt;h3 id=&quot;editors&quot;&gt;Editors&lt;/h3&gt;
-&lt;p&gt;Editors are the 2nd user level in Ghost. Editors can do everything that an Author can do, but they can also edit and publish the posts of others - as well as their own. Editors can also invite new authors to the site.&lt;/p&gt;
-&lt;h3 id=&quot;administrators&quot;&gt;Administrators&lt;/h3&gt;
-&lt;p&gt;The top user level in Ghost is Administrator. Again, administrators can do everything that Authors and Editors can do, but they can also edit all site settings and data, not just content. Additionally, administrators have full access to invite, manage or remove any other user of the site.&lt;/p&gt;
-&lt;h3 id=&quot;theowner&quot;&gt;The Owner&lt;/h3&gt;
-&lt;p&gt;There is only ever one owner of a Ghost site. The owner is a special user which has all the same permissions as an Administrator, but with two exceptions: The Owner can never be deleted. And in some circumstances the owner will have access to additional special settings if applicable — for example, billing details, if using Ghost(Pro).&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;It&apos;s a good idea to ask all of your users to fill out their user profiles, including bio and social links. These will populate rich structured data for posts and generally create more opportunities for themes to fully populate their design.&lt;/p&gt;
+          <description>
 </description>
         
-        <pubDate>Thu, 27 Jul 2017 16:00:00 +0900</pubDate>
+        <pubDate>Sat, 27 Aug 2022 19:18:23 +0900</pubDate>
         <link>
-        https://haides8973.github.io/managing-users</link>
-        <guid isPermaLink="true">https://haides8973.github.io/managing-users</guid>
+        https://haides8973.github.io/dependency-parsing</link>
+        <guid isPermaLink="true">https://haides8973.github.io/dependency-parsing</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>Word Vector</title>
+        
+          <description>&lt;h1 id=&quot;숫자로-언어를-표현하기&quot;&gt;숫자로 언어를 표현하기&lt;/h1&gt;
+
+</description>
+        
+        <pubDate>Fri, 26 Aug 2022 03:33:54 +0900</pubDate>
+        <link>
+        https://haides8973.github.io/word-vector</link>
+        <guid isPermaLink="true">https://haides8973.github.io/word-vector</guid>
       </item>
       
     
@@ -98,21 +103,6 @@
         <link>
         https://haides8973.github.io/i-have-a-dream</link>
         <guid isPermaLink="true">https://haides8973.github.io/i-have-a-dream</guid>
-      </item>
-      
-    
-      
-      <item>
-        <title>The Purpose of Education</title>
-        
-          <description>&lt;p&gt;다람쥐 헌 쳇바퀴에 타고파&lt;/p&gt;
-
-</description>
-        
-        <pubDate>Sun, 12 Dec 1948 19:18:00 +0900</pubDate>
-        <link>
-        https://haides8973.github.io/the-purpose-of-education</link>
-        <guid isPermaLink="true">https://haides8973.github.io/the-purpose-of-education</guid>
       </item>
       
     
