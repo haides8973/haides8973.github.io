@@ -70,8 +70,7 @@ MathJax.Hub.Register.MessageHook("TeX Jax - parse error",function (message) {
     <meta property="og:site_name" content="Sangjoon Lee's Playground" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Dependency Parsing" />
-    <meta property="og:description" content="
-" />
+    <meta property="og:description" content="문장의 구조를 올바르게 파악하기 컴퓨터가 문장을 이해하기 위한 첫걸음은 무엇일까? 우리가 어렸을 적 영어를 배울 때, 문법 시간에 ‘문장의 5형식’ 이라는 말을 들어본 적이 있을 것이다. 이미지 출처 영어의 모든 문장은 이 5개 유형에서 벗어나지 않는다는 뜻인데, Parsing이라는 task도 같은 맥락에서 볼 수 있다. 언어학에서 Parsing은 문장을 구성 성분으로 분해하고," />
     <meta property="og:url" content="https://haides8973.github.io/dependency-parsing" />
     <meta property="og:image" content="https://haides8973.github.io/assets/images/grapes.jpg" />
     <meta property="article:publisher" content="https://www.facebook.com/" />
@@ -81,8 +80,7 @@ MathJax.Hub.Register.MessageHook("TeX Jax - parse error",function (message) {
     <meta property="article:tag" content="Nlp" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Dependency Parsing" />
-    <meta name="twitter:description" content="
-" />
+    <meta name="twitter:description" content="문장의 구조를 올바르게 파악하기 컴퓨터가 문장을 이해하기 위한 첫걸음은 무엇일까? 우리가 어렸을 적 영어를 배울 때, 문법 시간에 ‘문장의 5형식’ 이라는 말을 들어본 적이 있을 것이다. 이미지 출처 영어의 모든 문장은 이 5개 유형에서 벗어나지 않는다는 뜻인데, Parsing이라는 task도 같은 맥락에서 볼 수 있다. 언어학에서 Parsing은 문장을 구성 성분으로 분해하고," />
     <meta name="twitter:url" content="https://haides8973.github.io/" />
     <meta name="twitter:image" content="https://haides8973.github.io/assets/images/grapes.jpg" />
     <meta name="twitter:label1" content="Written by" />
@@ -114,8 +112,7 @@ MathJax.Hub.Register.MessageHook("TeX Jax - parse error",function (message) {
         "@type": "WebPage",
         "@id": "https://haides8973.github.io/dependency-parsing"
     },
-    "description": "
-"
+    "description": "문장의 구조를 올바르게 파악하기 컴퓨터가 문장을 이해하기 위한 첫걸음은 무엇일까? 우리가 어렸을 적 영어를 배울 때, 문법 시간에 ‘문장의 5형식’ 이라는 말을 들어본 적이 있을 것이다. 이미지 출처 영어의 모든 문장은 이 5개 유형에서 벗어나지 않는다는 뜻인데, Parsing이라는 task도 같은 맥락에서 볼 수 있다. 언어학에서 Parsing은 문장을 구성 성분으로 분해하고,"
 }
     </script>
 
@@ -221,7 +218,255 @@ into the {body} of the default.hbs template -->
 
             <section class="post-full-content">
                 <div class="kg-card-markdown">
-                    
+                    <h1 id="문장의-구조를-올바르게-파악하기">문장의 구조를 올바르게 파악하기</h1>
+
+<p><span style="font-size:80%">
+컴퓨터가 문장을 이해하기 위한 첫걸음은 무엇일까? 
+</span>
+<br /><br /><br />
+우리가 어렸을 적 영어를 배울 때, 문법 시간에 ‘문장의 5형식’ 이라는 말을 들어본 적이 있을 것이다. 
+<img src="../assets/images/NLP/5sentences.jpg" alt="alt text" /></p>
+
+<div style="text-align: right"> 
+<span style="font-size:60%">
+<a href="https://post.naver.com/viewer/postView.nhn?volumeNo=17878325&amp;memberNo=43247331" target="_blank">
+이미지 출처</a>
+</span>
+</div>
+<p><br /></p>
+
+<p>영어의 모든 문장은 이 5개 유형에서 벗어나지 않는다는 뜻인데,
+<strong>Parsing</strong>이라는 task도 같은 맥락에서 볼 수 있다.
+언어학에서 Parsing은 문장을 구성 성분으로 분해하고, 그것들 사이의 위계 관계를 분석하여 문장의 구조를 결정하는 것을 말한다.
+단어들이 서로 어떻게 연관되어 있는지를 찾아내어 가장 핵심이 되는 것들을 추려내는 작업이라고 생각하면 비슷하다.</p>
+
+<p><br /></p>
+
+<h4 id="올바른-parsing의-중요성">올바른 Parsing의 중요성</h4>
+<p><br />
+<strong>The guard killed the woman with a sharp knife.</strong></p>
+
+<ul>
+  <li>전치사구 ‘with a sharp knife’가 수식하는 대상이 ‘killed’인지 ‘woman’인지 알 수 없다.</li>
+</ul>
+
+<p><strong>Shuttle veteran and longtime NASA executive Fred Gregory appointed to board.</strong></p>
+
+<ul>
+  <li>‘Fred Gregory’가 ‘shuttle veteran’과 ‘longtime NASA executive’ 둘 다에 해당할 수도 있고, 혹은 ‘longtime NASA executive’에만 해당할 수도 있다.</li>
+</ul>
+
+<p><strong>Mutilated body washes up on Rio beach to be used for Olympic beach volleyball.</strong></p>
+
+<ul>
+  <li>‘to be used…‘가 ‘Rio beach’의 동사구인지, ‘Mutilated body’의 동사구인지 확실하지 않다. 의미를 따져보면 당연히 전자겠지만 구조상으로는 전혀 문제가 없다.</li>
+</ul>
+
+<p>위와 같은 문장들을 올바르게 해석하기 위해서는 문장의 구성을 제대로 파악해야 한다.
+<br /></p>
+<h2 id="constituency-parsing">Constituency parsing</h2>
+<p><br />
+문장의 구성 요소에 맞추어 문장의 구조를 파악하는 방법.<br />
+예를 들어 ‘The strange noise’는 관형사(Det) ‘The’, 형용사(Adj) ‘strange’, 명사(N) ‘cat’으로 나뉜다.
+각 단어들을 어순에 맞게 결합하여 구(phrase)를 만들어낸다.
+이 ‘어순’이라는 것은 정규 표현식(regular expression)과도 같아서, 어떤 패턴을 갖는 phrase를 어떻게 해석해야 할 지 바로 알 수 있다.</p>
+
+<p>예를 들어 명사구(Noun Phrase)는 핵심이 되는 noun 앞에 관형사가 올 수 있고, 전치사구(Prepositional phrase)로부터 수식받을 수도 있다.
+명사구 ‘The strange noise’에 ‘from the void’라는 전치사구가 붙는다 해도 결국엔 명사구로 해석된다.</p>
+
+<h2 id="dependency-parsing">Dependency parsing</h2>
+<p><br />
+문장을 이루는 단어 하나하나가 어떤 단어와 직접적으로 연관되어 있는지 파악하는 방법. 언어에 구애받지 않고 사용가능하다.</p>
+
+<p><img src="../assets/images/NLP/dependencystructure.png" alt="alt text" width="80%" height="90%" /></p>
+
+<p>위 예시에서 Look이 문장의 핵심이 되는 문구이고, 그 다음은 crate가 Look의 목적어로서 의존하고 있다. 
+crate는 kitchen과 door을 의존어로 가지고 있다.</p>
+
+<p>Constituency parsing에서는 문장을 phrase의 집합으로 본 반면, Dependency parsing에서는 단어 각각의 관계가 더 중요하다.</p>
+
+<h4 id="building-a-dependency-structure">Building A Dependency Structure</h4>
+<p><br />
+Dependency parsing을 하기 위해서는 단어 간 관계의 집합을 정의해야 한다. 통상적으로
+<a href="https://en.wikipedia.org/wiki/Dependency_grammar" target="_blank">
+<span style="color:cornflowerblue">Dependency Grammar</span></a> 를 채용한다.</p>
+
+<p><span style="font-size:80%">
+The results demonstrated that KaiC interacts rhythmically with SasA with KaiA and KaiB.
+</span></p>
+
+<p><img src="../assets/images/NLP/dependency_tree.png" alt="alt text" width="80%" height="90%" /></p>
+
+<p>이 단어와 단어 사이의 의존 관계는 어떻게 결정할 수 있을까? 예시를 몇 개 들어보자면:</p>
+
+<ul>
+  <li>bilexical affinities</li>
+</ul>
+
+<p>lexical affinity란, 임의의 단어가 특정 카테고리의 다른 단어들에 친화(affinity)적일 확률을 뜻한다. 
+예를 들어 ‘hurt’라는 단어는 주로 사고에 관련된 것들과 (예를 들어 ‘car accident’) 친화적이리라고 추측할 수 있다.
+bilexical affinity는 단어와 카테고리가 아닌, 단어와 단어 간의 친화도를 뜻한다.</p>
+
+<ul>
+  <li>dependency distance</li>
+</ul>
+
+<p>의존 관계를 갖는 단어는 대개 가까운 위치에 존재함을 뜻한다.</p>
+
+<ul>
+  <li>intervening material</li>
+</ul>
+
+<p>의존 관계를 갖는 단어 사이에는 대부분 동사나 구두점 등(intervening materials)이 오지 않음을 뜻한다.</p>
+
+<ul>
+  <li>valency of heads</li>
+</ul>
+
+<p><a href="https://en.wikipedia.org/wiki/Valency_(linguistics)" target="_blank">
+<span style="color:cornflowerblue">valency</span></a>
+는 술어(Predicate)나 Content verb의 argument의 갯수와 종류를 정하는 규칙이다. 즉, 맨 위에서 말한 문장의 5형식이라고 생각하면 된다.
+그 외에도 ‘전치사(conjunction)가 의존하는 단어는 대개 명사이다’ 같은 규칙도 여기에 포함한다.</p>
+
+<h5 id="greedy-transition-based-parsing">Greedy transition based parsing</h5>
+
+<p>이제 실제로 Parsing을 어떻게 하는지 알아보자. 여기서는 과거의 방식들보다 효과적이라고 증명된 transition-based parsing을 소개한다.
+엄밀한 정의를 위해 Parser를 state machine으로 정의한다.</p>
+
+<p>주어진 문장 $W = w_0 w_1 w_2…w_n$ 에 대해, 임의의 상태 c는 3-튜플 ($\sigma , \beta$, A)로 표현된다.</p>
+
+<ul>
+  <li>$\sigma$는 $W$에 속하는 어떤 $w_i$들로 이루어진 <strong>Stack</strong></li>
+  <li>$\beta$는 $W$에 속하는 어떤 $w_i$들로 이루어진 <strong>Buffer</strong></li>
+  <li>A는 튜플 ($w_i, r, w_j$)로 이루어진 <strong>Dependency Arc</strong>의 집합. 이때 $w_i, w_j$는 $W$에 속하고 $r$은 의존 관계를 의미한다.</li>
+</ul>
+
+<p>초기 상태는 ($\left[ w_0 \right]^{\sigma}, \left[w_1…w_n \right]^{\beta}, \emptyset$)이고,
+종료 상태는 ($W, \emptyset$, A)이다.</p>
+
+<p>상태 전이(state transition)의 종류는 총 3가지이다.</p>
+
+<ul>
+  <li>Shift: ($\beta$가 $\emptyset$이 아닐 때) $\beta$ 맨 위의 단어를 pop하고 $\sigma$에 push 한다.</li>
+  <li>Left-arc: ($\sigma$에 최소 2개의 단어가 있을 때) A에 ($w_i, r, w_j$)를 추가한다. 이때 $w_i$는 $\sigma$ 맨 위의 단어이고 $w_j$는 두 번째 단어이다. $w_j$를 $\sigma$에서 제거한다.</li>
+  <li>Right-arc: ($\sigma$에 최소 2개의 단어가 있을 때) A에 ($w_j, r, w_i$)를 추가한다. 이때 $w_i$는 $\sigma$ 맨 위의 단어이고 $w_j$는 두 번째 단어이다. $w_i$를 $\sigma$에서 제거한다.</li>
+</ul>
+
+<p>좀더 형식적인 정의는 다음과 같다.
+<img src="../assets/images/NLP/transition.PNG" alt="alt text" /></p>
+
+<p>다음은 문장 <strong>I tried eating rotten apples.</strong> 를 parsing하는 과정이다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">$\beta$</th>
+      <th style="text-align: center">$\sigma$</th>
+      <th style="text-align: center">Transition</th>
+      <th style="text-align: center">Relation added</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">I, tried, eating, rotten, apples</td>
+      <td style="text-align: center">[root]</td>
+      <td style="text-align: center">Shift</td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: center">tried, eating, rotten, apples</td>
+      <td style="text-align: center">[root, I]</td>
+      <td style="text-align: center">Shift</td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: center">eating, rotten, apples</td>
+      <td style="text-align: center">[root, I, tried]</td>
+      <td style="text-align: center">Shift</td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: center">rotten, apples</td>
+      <td style="text-align: center">[root, I, tried, eating]</td>
+      <td style="text-align: center">Shift</td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: center">apples</td>
+      <td style="text-align: center">[root, I, tried, eating, rotten]</td>
+      <td style="text-align: center">Shift</td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">[root, I, tried, eating, rotten, apples]</td>
+      <td style="text-align: center">Left-arc</td>
+      <td style="text-align: center">(rotten, ATTR, apples)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">[root, I, tried, eating, apples]</td>
+      <td style="text-align: center">Right-arc</td>
+      <td style="text-align: center">(apples, NOBJ, eating)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">[root, I, tried, eating]</td>
+      <td style="text-align: center">Right-arc</td>
+      <td style="text-align: center">(eating, XCOMP, tried)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">[root, I, tried]</td>
+      <td style="text-align: center">Right-arc</td>
+      <td style="text-align: center">(tried, NSUBJ, I)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">[root, I]</td>
+      <td style="text-align: center">Right-arc</td>
+      <td style="text-align: center">(I, ROOT, root)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>쉽게 설명하자면, Dependency structure에서 가장 말단이 되는 단어와 바로 위 단계의 단어가 스택에 존재할 때 까지 shift를 한다.
+그리고 나서 left / right arc를 통해 관계를 저장한다.
+새로운 상태에서 이를 반복하다가 ROOT가 단어 관계에 포함될 때 종료하는 식이다.</p>
+
+<p>그런데 가장 중요한 Transition은 대체 어떻게 결정되는 건지 의문이 생긴다.
+<br /></p>
+
+<h5 id="parser-model">Parser Model</h5>
+<p><br />
+우리의 Parser는 주어진 문장 $W$를 구성하는 단어들에 대해 $d$-dimension의 word vector를 구한다. 
+그리고 POS(part-of-speech) 정보와 arc-label(nsubj, dobj 등)도 $d$-dimension으로 임베딩한다.
+그러면 우리는 Parser의 입력층에 넣을 정보인 $x^w$(word vector), $x^t$(POS), $x^l$(arc-label)을 얻을 수 있다.
+(얻고자 하는 두 단어의 arc-label은 넣지 않는다.)</p>
+
+<p>POS와 arc-label 정보까지 입력층에 포함하는 이유는 언어(영어)에서 나타나는 통계적인 패턴을 학습에 포함하기 위해서이다.
+예를 들면, 명사 단수형은 Determinator(지시대명사) 보다는 명사 복수형에 더 가까운 것과 같은 정보를 모델이 캐치하도록 돕는다.</p>
+
+<p><img src="../assets/images/NLP/parser_model.PNG" alt="drawing" width="108%" /></p>
+
+<p>입력층의 각 값과 weight matrix $W^w_1, W^w_2, W^w_3$ 그리고 bias $b_1$까지 포함한 값의 <strong>3제곱</strong>을 Hidden Layer로 넘겨준다.
+이때 sigmoid나 tanh 대신 cube activation function을 사용하는 점에 대해서는
+(연구진들에 의하면) $x^w, x^t, x^l$이 전혀 다른 종류의 정보라는 사실에서 기인한다.
+밑의 $(x+y+z)^3$의 전개식을 살펴보면 일부 항에 $x, y, z$의 특징이 보존됨을 알 수 있다.</p>
+
+<p><span style=" font-size:90%">
+$(x+y+z)^3 = x^3 + y^3 + z^3 + 3x^2 y + 3x^2 z + 3xy^2 + 3y^2 z + 3xz^2 + 3yz^2 + 6xyz$
+</span>
+<br /></p>
+
+<p>최종적으로 softmax layer에서 구하고자 하는 의존관계에 대한 multi-class probability를 계산한다.</p>
+
+<hr />
+
+<p>고려대학교 이병준 교수님의 2021년 가을학기 ‘자연어처리’ 강의 자료와 원 논문(들)을 참고하여 작성했습니다.</p>
+
+<p><a href="https://aclanthology.org/D14-1082">A Fast and Accurate Dependency Parser using Neural Networks</a> (Chen &amp; Manning, EMNLP 2014)에.</p>
+
 
                 </div>
             </section>
@@ -349,7 +594,7 @@ into the {body} of the default.hbs template -->
                 </header>
                 <section class="post-card-excerpt">
                     
-                        <p>숫자로 언어를 표현하기
+                        <p>숫자로 언어를 표현하려면
 
 </p>
                     
