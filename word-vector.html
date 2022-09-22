@@ -381,7 +381,7 @@ $</p>
 <details>
   <summary>Calculating Gradient Descent of SkipGram</summary>
 
-  <p><img src="../assets/images/NLP/skipgramsg.png" alt="alt text" /></p>
+  <p><img src="../assets/images/NLP/skipgramsg.PNG" alt="alt text" /></p>
 
 </details>
 <p><br /></p>
@@ -448,7 +448,7 @@ $
 <em>Singular Value Decomposition</em>을 통해 이 행렬을 분해하면 word embedding vector를 얻을 수 있다. 
 co-occurence matrix는 symmetric square matrix이므로 n=d임에 유의하자.</p>
 
-<p><img src="../assets/images/NLP/svd.png" alt="alt text" /></p>
+<p><img src="../assets/images/NLP/SVD.png" alt="alt text" /></p>
 
 <p>이렇게 분해된 행렬에 대해 상위 t개 - embedding vector의 차수 만큼의 특이값만 추출하여 사용한다. (Truncated SVD)
 그러면 $U$는 $n \times t$의 $U’$가, $S$는 $t \times t$의 $S’$가, $V^{\top}$는 $t \times n$의 $V’^{\top}$가 된다.
@@ -481,7 +481,7 @@ $</p>
 <p>우선, 단어 $w_i$와 $w_j$를 embedding 공간에서 비교할 때, 그 연산이 linear하도록 정의한다. 
 이는 이전 word embedding들이 모두 그러한 특성을 가지고 있었기 때문이다.</p>
 
-<p><img src="../assets/images/NLP/glove_embed.png" alt="alt text" />
+<p><img src="../assets/images/NLP/glove_embed.PNG" alt="alt text" />
 이 예시는 Word2Vec에서 국가와 그 수도가 어떤 선형관계를 보여주는지 2차원으로 나타낸 결과이다. 
 GloVe 역시 이것을 따라가고자 했다.
 따라서 좌변을 다음과 같이 바꿀 수 있다.</p>
@@ -552,7 +552,7 @@ $
 
 <p>word vector를 평가하는 가장 대표적인 방법은 찾고자 하는 관계쌍을 벡터 공간상에서 표현했을 때 얼마나 통일성 있게 단어들이 정렬되어있나를 보는 것이다.</p>
 
-<p><img src="../assets/images/NLP/glove_embed.png" alt="alt text" /></p>
+<p><img src="../assets/images/NLP/glove_embed.PNG" alt="alt text" /></p>
 <center><span style="font-size:80%">
 국가-수도의 관계가 벡터 공간상에서 통일성 있게 나타나고 있다. 
 </span></center>
